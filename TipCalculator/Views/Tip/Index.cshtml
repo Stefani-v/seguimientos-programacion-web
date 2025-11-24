@@ -1,0 +1,33 @@
+﻿@model TipCalculator.Models.TipModel
+
+<div class="container mt-5">
+    <h2>Tip Calculator</h2>
+
+    <form asp-action="Calculate" method="post" class="mt-4">
+
+        <div class="form-group mb-3">
+            <label>Bill Amount ($)</label>
+            <input asp-for="BillAmount" class="form-control" type="number" step="0.01" required />
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Tip Percentage (%)</label>
+            <select asp-for="TipPercentage" class="form-control">
+                <option value="10">10%</option>
+                <option value="15">15%</option>
+                <option value="20">20%</option>
+                <option value="25">25%</option>
+            </select>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Calculate</button>
+    </form>
+
+    @if (Model.TipAmount > 0)
+    {
+        <div class="mt-4 alert alert-success">
+            <p><strong>Tip Amount:</strong> $@Model.TipAmount</p>
+            <p><strong>Total to Pay:</strong> $@Model.TotalToPay</p>
+        </div>
+    }
+</div>

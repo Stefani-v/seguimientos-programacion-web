@@ -1,0 +1,114 @@
+﻿@{
+    ViewData["Title"] = "CALENDAR";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+<style>
+    body {
+        background-color: #fff6fb;
+    }
+
+    .calendar-container {
+        margin: 40px auto;
+        max-width: 900px;
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+    }
+
+    #calendar {
+        max-width: 100%;
+    }
+</style>
+
+<div class="calendar-container">
+    <h2 class="text-center mb-4" style="color:#ff5f9e;">🌸 Calendario de Eventos 🌸</h2>
+    <div id="calendar"></div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('calendar');
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                selectable: true,
+                editable: true,
+                events: function(info, successCallback, failureCallback) {
+                    fetch('/Events/GetEvents')
+                        .then(response => response.json())
+                        .then(data => {
+                            successCallback(data);
+                        })
+                        .catch(error => {
+                            console.error('Error cargando eventos:', error);
+                            failureCallback(error);
+                        });
+                },
+                 dateClick: async function (info) {
+                    const { value: title } = await Swal.fire({
+                        title: 'Nombre del evento:',
+                        input: 'text',
+                        showCancelButton: true,
+                        confirmButtonText: 'Aceptar',
+                        cancelButtonText: 'Cancelar'
+                    });
+
+                    if (title) {
+                        const newEvent = {
+                            title: title,
+                            start: info.dateStr,
+                            end: info.dateStr
+                        };
+                        fetch('/Events/CreateEvent', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(newEvent)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            calendar.refetchEvents();
+                            Swal.fire('¡Evento creado!', '', 'success');
+                        })
+                        .catch(error => {
+                            console.error('Error creando evento:', error);
+                            Swal.fire('Error al crear el evento', '', 'error');
+                        });
+                    }
+                },
+                eventClick: function (info) {
+                    const action = confirm("¿Deseas eliminar este evento?");
+                    if (action) {
+                        fetch(`/Events/DeleteEvent?id=${info.event.id}`, {
+                            method: 'POST'
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                info.event.remove();
+                                alert("¡Evento eliminado!");
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error eliminando evento:', error);
+                            alert("Error al eliminar el evento");
+                        });
+                    }
+                }
+            });
+
+            calendar.render();
+        });
+    </script>
+}

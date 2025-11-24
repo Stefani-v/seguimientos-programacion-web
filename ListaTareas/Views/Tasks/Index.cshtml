@@ -1,0 +1,42 @@
+﻿@using To_doList.Models
+@model List<To_doList.Models.TaskItem>
+
+@{
+    ViewData["Title"] = "To Do";
+    
+}
+
+<link rel="stylesheet" href="~/css/todolist.css" />
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+
+    <form asp-action="Add" method="post">
+        <input type="text" name="description" placeholder="New task..." required />
+        <button type="submit">Add</button>
+    </form>
+
+    <ul>
+        @foreach (var task in Model)
+        {
+            <li>
+                <form asp-action="ToggleComplete" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@task.Id" />
+                    <button type="submit">@((task.IsCompleted ? "✔" : "X"))</button>
+                </form>
+
+                <span class="@(task.IsCompleted ? "completed" : "")">
+                    @task.Description
+                </span>
+
+                <form asp-action="Delete" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@task.Id" />
+                    <button type="submit">Borrar</button>
+                </form>
+            </li>
+        }
+    </ul>
+</div>
+
+<script src="~/js/todolist.js"></script>
+

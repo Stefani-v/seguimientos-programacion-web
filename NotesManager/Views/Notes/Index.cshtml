@@ -1,0 +1,29 @@
+﻿@model List<NotesManager.Models.Note>
+
+<h2 class="mb-4">Your Notes</h2>
+
+<form method="get" class="mb-4">
+    <div class="input-group">
+        <input name="search" class="form-control" placeholder="Search notes..." value="@ViewBag.Search" />
+        <button class="btn btn-dark-custom">Search</button>
+    </div>
+</form>
+
+<div class="row g-3">
+    @foreach (var note in Model)
+    {
+        <div class="col-md-4">
+            <div class="note-card">
+                <h5>@note.Title</h5>
+                <small class="text-muted">@note.Category</small>
+                <p class="mt-2 text-secondary">@note.Content</p>
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" name="id" value="@note.Id" />
+                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    }
+</div>
+

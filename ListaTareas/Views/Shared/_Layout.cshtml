@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/To_doList.styles.css" asp-append-version="true" />
+    
+
+</head>
+<body>
+   
+    <button class="theme-toggle" id="themeToggle">Dark</button>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - ToDo - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+               document.addEventListener("DOMContentLoaded", function () {
+            const toggleBtn = document.getElementById("themeToggle");
+
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "dark") {
+                document.documentElement.classList.add("dark-mode");
+                toggleBtn.textContent = "Light";
+            }
+
+            toggleBtn.addEventListener("click", () => {
+                document.documentElement.classList.toggle("dark-mode");
+                const isDark = document.documentElement.classList.contains("dark-mode");
+                toggleBtn.textContent = isDark ? "Light" : "Dark";
+                localStorage.setItem("theme", isDark ? "dark" : "light");
+            });
+        });
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+﻿@model List<YellowRecipes.Models.Recipe>
+
+@{
+    ViewData["Title"] = "Mis Recetas";
+}
+
+<style>
+    body {
+        background-color: #FFF9E3;
+    }
+
+    .bg-yellow {
+        background-color: #FFD93D;
+    }
+
+    .btn-yellow {
+        background-color: #FFD93D;
+        border: none;
+    }
+
+        .btn-yellow:hover {
+            background-color: #F4C430;
+        }
+</style>
+
+<div class="bg-yellow py-4 mb-4">
+    <div class="container">
+        <h1 class="text-center">Easy Recipes</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card mb-4 border-warning">
+        <div class="card-body">
+            <form method="get" asp-action="Index" class="row g-3">
+                <div class="col-md-5">
+                    <input type="text" class="form-control" name="search"
+                           placeholder="Buscar..." value="@Context.Request.Query["search"]">
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" name="category">
+                        <option value="">Todas</option>
+                        <option value="Desayuno">Desayuno</option>
+                        <option value="Almuerzo">Almuerzo</option>
+                        <option value="Cena">Cena</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-yellow w-100">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between mb-3">
+        <h3>Recetas (@Model.Count)</h3>
+        <a asp-action="Create" class="btn btn-yellow">+ Nueva</a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var recipe in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-warning">
+                        <div class="card-header bg-yellow">
+                            <h5>@recipe.Title</h5>
+                        </div>
+                        <div class="card-body">
+                            <span class="badge bg-warning text-dark mb-2">@recipe.Category</span>
+                            <p>@recipe.Description</p>
+                            <p class="small text-muted"><strong>Ingredientes:</strong> @recipe.Ingredients</p>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <a asp-action="Details" asp-route-id="@recipe.Id"
+                               class="btn btn-yellow w-100">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

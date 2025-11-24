@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "To_doList", "ListaTareas\To_doList.csproj", "{60BCCEA9-2E19-49F9-B2E0-EA14253B6152}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasswordG", "PasswordG\PasswordG.csproj", "{4AE321B1-DBD2-46F1-999B-69167573AA0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expenses", "Expenses\Expenses.csproj", "{DE0C2A0E-2F50-4D21-A368-B22979410815}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotesManager", "NotesManager\NotesManager.csproj", "{8A058ECE-4215-4D15-96BD-DFEAEAE6CFF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar", "Calendar\Calendar.csproj", "{A0990D68-BBC9-48F4-BF43-A6D372C66C1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YellowRecipes", "YellowRecipes\YellowRecipes.csproj", "{8C0EEF31-7EBE-4E79-ABF8-A14B7EEC175D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TipCalculator", "TipCalculator\TipCalculator.csproj", "{72A52659-F248-E06E-C13C-3BA4699A1710}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{60BCCEA9-2E19-49F9-B2E0-EA14253B6152}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60BCCEA9-2E19-49F9-B2E0-EA14253B6152}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60BCCEA9-2E19-49F9-B2E0-EA14253B6152}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60BCCEA9-2E19-49F9-B2E0-EA14253B6152}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AE321B1-DBD2-46F1-999B-69167573AA0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AE321B1-DBD2-46F1-999B-69167573AA0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AE321B1-DBD2-46F1-999B-69167573AA0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AE321B1-DBD2-46F1-999B-69167573AA0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE0C2A0E-2F50-4D21-A368-B22979410815}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE0C2A0E-2F50-4D21-A368-B22979410815}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE0C2A0E-2F50-4D21-A368-B22979410815}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE0C2A0E-2F50-4D21-A368-B22979410815}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A058ECE-4215-4D15-96BD-DFEAEAE6CFF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A058ECE-4215-4D15-96BD-DFEAEAE6CFF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A058ECE-4215-4D15-96BD-DFEAEAE6CFF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A058ECE-4215-4D15-96BD-DFEAEAE6CFF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0990D68-BBC9-48F4-BF43-A6D372C66C1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0990D68-BBC9-48F4-BF43-A6D372C66C1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0990D68-BBC9-48F4-BF43-A6D372C66C1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0990D68-BBC9-48F4-BF43-A6D372C66C1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C0EEF31-7EBE-4E79-ABF8-A14B7EEC175D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C0EEF31-7EBE-4E79-ABF8-A14B7EEC175D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C0EEF31-7EBE-4E79-ABF8-A14B7EEC175D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C0EEF31-7EBE-4E79-ABF8-A14B7EEC175D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72A52659-F248-E06E-C13C-3BA4699A1710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72A52659-F248-E06E-C13C-3BA4699A1710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72A52659-F248-E06E-C13C-3BA4699A1710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72A52659-F248-E06E-C13C-3BA4699A1710}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5E4F2C0E-5B99-472E-8613-E335405273A2}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,135 @@
+﻿/*El selecto (body, .container, etc indica a qupe parte del HTML afecta*/
+    
+    /*Selector
+        Propiedad :valor*/
+
+/* Styles (Light + Dark Mode) */
+
+/* === Fondo general === */
+html {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #a8edea, #fed6e3);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    transition: background 0.5s ease;
+}
+
+
+
+/* === Caja principal === */
+.container {
+    background: linear-gradient(135deg, #a8edea, #fed6e3);
+    margin-top: 60px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    width: 90%;
+    max-width: 480px;
+    color: #333333;
+    transition: all 0.4s ease;
+}
+
+/* === Título === */
+h2 {
+    text-align: center;
+    color: #0288d1;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+
+
+
+/* === Formulario === */
+form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #81d4fa;
+    border-radius: 8px;
+    font-size: 15px;
+    background-color: transparent;
+    color: #333333;
+    transition: all 0.3s ease;
+}
+
+    input[type="text"]:focus {
+        border-color: #0288d1;
+        outline: none;
+        box-shadow: 0 0 5px rgba(2, 136, 209, 0.4);
+    }
+
+/* === Botones === */
+button {
+    background-color: #0288d1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+    button:hover {
+        background-color: #0277bd;
+        transform: scale(1.05);
+    }
+
+/* === Lista de tareas === */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+    li:hover {
+        background-color: #f0f8ff;
+    }
+
+    li span {
+        flex: 1;
+        margin-left: 10px;
+        font-size: 16px;
+    }
+
+    /* Formularios pequeños dentro de la lista */
+    li form {
+        display: inline;
+    }
+
+/* === Tareas completadas === */
+.completed {
+    text-decoration: line-through;
+    color: gray;
+    opacity: 0.7;
+}
+
+/* === Animación al agregar tareas === */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+li {
+    animation: fadeIn 0.3s ease;
+}
