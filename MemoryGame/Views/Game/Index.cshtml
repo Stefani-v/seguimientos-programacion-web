@@ -1,5 +1,141 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model MemoryGame.Models.MemoryG
+
+<div class="text-center mt-8">
+    <h2 class="text-3xl font-bold text-purple-600">💜 Memory Game — Level @Model.Level</h2>
+    <p class="text-purple-400 mt-2">Pairs: @Model.CardPairs</p>
+</div>
+
+<!-- Selector de niveles -->
+<div class="text-center mt-6 space-x-4">
+    <a href="/Game/Index?level=1" class="text-purple-500 hover:text-purple-700 font-bold">Nivel 1</a>
+    <a href="/Game/Index?level=2" class="text-purple-500 hover:text-purple-700 font-bold">Nivel 2</a>
+    <a href="/Game/Index?level=3" class="text-purple-500 hover:text-purple-700 font-bold">Nivel 3</a>
+</div>
+
+<!--  TABLA DE PUNTAJES -->
+@if (ViewBag.Scores != null)
+{
+    <div class="mt-10 mx-auto w-1/2">
+        <h3 class="text-xl font-bold text-purple-600 text-center mb-4">🏅 Mejores puntajes del nivel @Model.Level</h3>
+
+        <table class="table-auto w-full bg-purple-100 rounded-lg shadow">
+            <thead>
+                <tr class="bg-purple-300 text-purple-900 font-bold">
+                    <th class="px-4 py-2">Jugador</th>
+                    <th class="px-4 py-2">Movimientos</th>
+                    <th class="px-4 py-2">Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in ViewBag.Scores)
+                {
+                    <tr class="border-b border-purple-300 text-center">
+                        <td class="px-4 py-2">@s.PlayerName</td>
+                        <td class="px-4 py-2">@s.Moves</td>
+                        <td class="px-4 py-2">@s.PlayedAt.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div id="gameBoard" class="grid gap-4 mt-10 mx-auto"
+     style="width: 80%; grid-template-columns: repeat(4, 1fr);">
+</div>
+
+<div class="text-center mt-6">
+    <button id="restartBtn"
+            class="bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 rounded">
+        Restart
+    </button>
+</div>
+
+@section Scripts {
+    <script>
+        const icons = [
+            "🍇","🍉","🍒","🍋","🍓","🥝","🍍","🥥",
+            "🌸","💜","⭐","🌙","🦄","🐱","🦋","🌈"
+        ];
+
+        let moves = 0;
+        let firstCard = null;
+        let lock = false;
+
+        const totalPairs = @Model.CardPairs;
+        const level = "@Model.Level";
+
+        function createBoard() {
+            const board = document.getElementById("gameBoard");
+            board.innerHTML = "";
+
+            const selected = icons.slice(0, totalPairs);
+            const cards = [...selected, ...selected]
+                .sort(() => Math.random() - 0.5);
+
+            moves = 0;
+
+            cards.forEach(icon => {
+                const card = document.createElement("div");
+                card.className =
+                    "p-4 bg-purple-200 rounded-lg shadow text-3xl flex justify-center items-center cursor-pointer hover:bg-purple-300 transition";
+                card.dataset.icon = icon;
+                card.textContent = "❔";
+
+                card.addEventListener("click", () => flipCard(card));
+
+                board.appendChild(card);
+            });
+        }
+
+        function flipCard(card) {
+            if (lock || card.textContent !== "❔") return;
+
+            card.textContent = card.dataset.icon;
+
+            if (!firstCard) {
+                firstCard = card;
+            } else {
+                moves++;
+                if (firstCard.dataset.icon === card.dataset.icon) {
+                    firstCard = null;
+                    checkWin();
+                } else {
+                    lock = true;
+                    setTimeout(() => {
+                        firstCard.textContent = "❔";
+                        card.textContent = "❔";
+                        firstCard = null;
+                        lock = false;
+                    }, 800);
+                }
+            }
+        }
+
+        function checkWin() {
+            const cards = [...document.querySelectorAll("#gameBoard div")];
+            const allMatched = cards.every(c => c.textContent !== "❔");
+            if (allMatched) {
+                setTimeout(() => {
+                    alert(`You won! Moves: ${moves}`);
+                    saveScore();
+                }, 200);
+            }
+        }
+
+        function saveScore() {
+            fetch('/Game/SaveScore', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    playerName: "Player",
+                    moves: moves,
+                    level: level
+                })
+            });
+        }
+
+        document.getElementById("restartBtn").addEventListener("click", createBoard);
+        createBoard();
+    </script>
 }

@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Crear Encuesta";
+}
+
+<div class="text-center mt-8">
+    <h1 class="text-3xl text-purple-600 font-bold">📝 Crear Encuesta</h1>
+</div>
+
+<form method="post" class="mt-10 mx-auto w-2/3">
+
+    <label class="block font-bold text-purple-700 mb-2">Pregunta:</label>
+    <input type="text" name="question" class="w-full p-2 border rounded mb-4" required />
+
+    <label class="block font-bold text-purple-700 mb-2">Opciones:</label>
+
+    <div id="options-container">
+        <input type="text" name="options" class="w-full p-2 border rounded mb-2" placeholder="Opción 1" required />
+        <input type="text" name="options" class="w-full p-2 border rounded mb-2" placeholder="Opción 2" required />
+    </div>
+
+    <button type="button" onclick="addOption()" class="bg-purple-400 text-white px-3 py-1 rounded mb-4">
+        ➕ Agregar opción
+    </button>
+
+    <br />
+
+    <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded">
+        Crear encuesta
+    </button>
+</form>
+
+<script>
+    function addOption() {
+        const container = document.getElementById("options-container");
+        const input = document.createElement("input");
+        input.type = "text";
+        input.name = "options";
+        input.placeholder = "Nueva opción";
+        input.className = "w-full p-2 border rounded mb-2";
+        container.appendChild(input);
+    }
+</script>

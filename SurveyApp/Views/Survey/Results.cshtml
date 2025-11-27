@@ -1,0 +1,44 @@
+﻿@model SurveyApp.Models.SurveyModel
+@{
+    ViewData["Title"] = "Resultados";
+    var counts = (Dictionary<string, int>)ViewBag.Counts;
+    var total = counts.Values.Sum();
+}
+
+<div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
+    <h2 class="text-3xl text-purple-700 font-bold text-center mb-2">📊 Resultados</h2>
+    <h3 class="text-xl text-gray-600 text-center mb-8">@Model.Question</h3>
+
+    <div class="mb-6 text-center">
+        <p class="text-gray-600">Total de votos: <span class="font-bold text-purple-600">@total</span></p>
+    </div>
+
+    <div class="space-y-4">
+        @foreach (var opt in Model.Options)
+        {
+            var count = counts[opt];
+            var percentage = total > 0 ? (count * 100.0 / total) : 0;
+
+            <div class="bg-purple-50 p-4 rounded-lg">
+                <div class="flex justify-between mb-2">
+                    <strong class="text-purple-700">@opt</strong>
+                    <span class="text-gray-600">@count votos (@percentage.ToString("F1")%)</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div class="bg-purple-600 h-4 rounded-full transition-all" style="width: @percentage%"></div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="mt-8 flex gap-4 justify-center">
+        <a asp-controller="Survey" asp-action="Vote" asp-route-id="@Model.Id"
+           class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg">
+            ✍️ Votar de Nuevo
+        </a>
+        <a asp-controller="Survey" asp-action="Index"
+           class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg">
+            ← Volver al Inicio
+        </a>
+    </div>
+</div>

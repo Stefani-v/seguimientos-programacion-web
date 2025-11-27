@@ -1,0 +1,30 @@
+﻿@model SurveyApp.Models.SurveyModel
+@{
+    ViewData["Title"] = "Responder Encuesta";
+}
+
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
+    <h2 class="text-3xl text-purple-700 font-bold text-center mb-8">@Model.Question</h2>
+
+    <form method="post" asp-controller="Survey" asp-action="Vote" asp-route-id="@Model.Id">
+        <div class="space-y-4">
+            @foreach (var opt in Model.Options)
+            {
+                <label class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 cursor-pointer transition">
+                    <input type="radio" name="option" value="@opt" required class="mr-3 w-5 h-5" />
+                    <span class="text-lg">@opt</span>
+                </label>
+            }
+        </div>
+
+        <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg w-full mt-6 text-lg font-semibold">
+            🚀 Votar Ahora
+        </button>
+    </form>
+
+    <div class="mt-6 text-center">
+        <a asp-controller="Survey" asp-action="Index" class="text-purple-600 hover:text-purple-800">
+            ← Volver a las encuestas
+        </a>
+    </div>
+</div>

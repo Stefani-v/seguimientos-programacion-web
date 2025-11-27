@@ -1,0 +1,88 @@
+﻿@{
+    Layout = null;
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container text-center mt-5">
+    <h1 class="display-5 fw-bold">⏱ Cronómetro Online</h1>
+
+    <div class="mt-5 fs-1" id="display">00:00.00</div>
+
+    <div class="mt-4">
+        <button id="startBtn" class="btn btn-success me-2">Start</button>
+        <button id="pauseBtn" class="btn btn-warning me-2">Pause</button>
+        <button id="resetBtn" class="btn btn-danger">Reset</button>
+        <button id="lapBtn" class="btn btn-primary me-2">🏁 Vuelta</button>
+
+    </div>
+
+    <h3 class="mt-5">Vueltas</h3>
+    <ul id="laps" class="list-group w-50 mx-auto"></ul>
+</div>
+
+<script>
+    let startTime = 0;
+    let elapsed = 0;
+    let running = false;
+    let interval;
+    let lapTimes = [];
+    let lapCount = 0;
+
+    function updateDisplay() {
+        const time = elapsed + (running ? Date.now() - startTime : 0);
+
+        const minutes = Math.floor(time / 60000);
+        const seconds = Math.floor((time % 60000) / 1000);
+        const ms = Math.floor((time % 1000) / 10);
+
+        document.getElementById("display").textContent =
+            `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(ms).padStart(2, '0')}`;
+    }
+    function formatTime(ms) {
+        const minutes = Math.floor(ms / 60000);
+        const seconds = Math.floor((ms % 60000) / 1000);
+        const milliseconds = Math.floor((ms % 1000) / 10);
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(2, '0')}`;
+    }
+
+    document.getElementById("startBtn").onclick = () => {
+        if (!running) {
+            running = true;
+            startTime = Date.now();
+            interval = setInterval(updateDisplay, 10);
+        }
+    }
+
+    document.getElementById("pauseBtn").onclick = () => {
+        if (running) {
+            running = false;
+            elapsed += Date.now() - startTime;
+            clearInterval(interval);
+        }
+    }
+    document.getElementById("lapBtn").onclick = () => {
+        if (running) {
+            lapCount++;
+            const currentTime = elapsed + Date.now() - startTime;
+            const lastLapTime = lapTimes.length > 0 ? lapTimes[lapTimes.length - 1].totalTime : 0;
+            const lapTime = currentTime - lastLapTime;
+
+            lapTimes.push({ number: lapCount, totalTime: currentTime, lapTime: lapTime });
+
+            const lapItem = document.createElement('li');
+            lapItem.className = 'list-group-item';
+            lapItem.textContent = `Vuelta ${lapCount}: ${formatTime(lapTime)} (Total: ${formatTime(currentTime)})`;
+            document.getElementById("laps").insertBefore(lapItem, document.getElementById("laps").firstChild);
+        }
+    }
+
+    document.getElementById("resetBtn").onclick = () => {
+        running = false;
+        elapsed = 0;
+        clearInterval(interval);
+        updateDisplay();
+        document.getElementById("laps").innerHTML = "";
+    }
+    
+</script>

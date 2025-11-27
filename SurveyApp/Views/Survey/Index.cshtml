@@ -1,0 +1,51 @@
+﻿@model List<SurveyApp.Models.SurveyModel>
+@{
+    ViewData["Title"] = "Encuestas";
+}
+
+<div class="text-center">
+    <h1 class="text-4xl text-purple-700 font-bold mb-6">📊 Todas las Encuestas</h1>
+    <a asp-controller="Survey" asp-action="Create" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg shadow-lg inline-block mb-8">
+        ➕ Crear Nueva Encuesta
+    </a>
+</div>
+
+<div class="max-w-4xl mx-auto">
+    @if (Model.Count == 0)
+    {
+        <div class="bg-white p-8 rounded-lg shadow text-center text-gray-500">
+            <p class="text-xl">No hay encuestas disponibles. ¡Crea la primera!</p>
+        </div>
+    }
+    else
+    {
+        @foreach (var s in Model)
+        {
+            <div class="bg-white p-6 rounded-lg shadow-md mb-4 hover:shadow-xl transition-shadow">
+                <div class="flex justify-between items-center">
+                    <div class="flex-1">
+                        <h3 class="text-xl text-purple-700 font-bold mb-2">@s.Question</h3>
+                        <p class="text-gray-600">@s.Options.Count opciones disponibles</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <a asp-controller="Survey" asp-action="Vote" asp-route-id="@s.Id"
+                           class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded">
+                            ✍️ Responder
+                        </a>
+                        <a asp-controller="Survey" asp-action="Results" asp-route-id="@s.Id"
+                           class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+                            📈 Resultados
+                        </a>
+                        <form method="post" asp-controller="Survey" asp-action="Delete" asp-route-id="@s.Id"
+                              onsubmit="return confirm('¿Estás seguro de eliminar esta encuesta? Se borrarán todos los votos.');"
+                              style="display: inline;">
+                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+                                🗑️ Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
