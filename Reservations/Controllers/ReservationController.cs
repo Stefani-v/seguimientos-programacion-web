@@ -3,62 +3,90 @@ using Reservations.Models;
 
 namespace Reservations.Controllers
 {
-    public class ReservationController: Controller
+    public class ReservationController : Controller
     {
-        private static List<Reservation> _reservations = new();
-        private static int _idCounter = 1;
-
-        private readonly List<string> _timeSlots = new()
-        {
-            "09:00 AM", "10:00 AM", "11:00 AM",
-            "01:00 PM", "02:00 PM", "03:00 PM",
-            "04:00 PM"
-        };
-
         public IActionResult Index()
         {
-            var vm = new ReservationView
-            {
-                Reservations = _reservations,
-                TimeSlots = _timeSlots
-            };
+            return View(ReservationData.Services);
+        }
 
-            return View(vm);
+        public IActionResult Book(int id)
+        {
+            var service = ReservationData.Services.FirstOrDefault(s => s.Id == id);
+            if (service == null) return RedirectToAction("Index");
+
+            ViewBag.Service = service;
+            ViewBag.AvailableSlots = ReservationData.AvailableSlots;
+            return View();
         }
 
         [HttpPost]
-        public IActionResult Reserve(ReservationView vm)
+        public IActionResult Book(int serviceId, string clientName, string clientEmail, DateTime date, string timeSlot)
         {
-            vm.NewReservation.Id = _idCounter++;
+            if (string.IsNullOrWhiteSpace(clientName) || string.IsNullOrWhiteSpace(clientEmail))
+                return RedirectToAction("Book", new { id = serviceId });
 
-            // Check if timeslot is already booked
-            bool taken = _reservations.Any(b =>
-                b.Date.Date == vm.NewReservation.Date.Date &&
-                b.TimeSlot == vm.NewReservation.TimeSlot);
-
-            if (taken)
+            var reservation = new Reservation
             {
-                ModelState.AddModelError("", "This timeslot is already booked.");
+                Id = ReservationData.Reservations.Count + 1,
+                ServiceId = serviceId,
+                ClientName = clientName,
+                ClientEmail = clientEmail,
+                Date = date,
+                TimeSlot = timeSlot,
+                Confirmed = false
+            };
 
-                vm.Reservations = _reservations;
-                vm.TimeSlots = _timeSlots;
-
-                return View("Index", vm);
-            }
-
-            _reservations.Add(vm.NewReservation);
-
-            return RedirectToAction("Index");
+            ReservationData.Reservations.Add(reservation);
+            return RedirectToAction("Confirmation", new { id = reservation.Id });
         }
 
-        public IActionResult Delete(int id)
+        public IActionResult Confirmation(int id)
         {
-            var booking = _reservations.FirstOrDefault(b => b.Id == id);
-            if (booking != null)
-                _reservations.Remove(booking);
+            var reservation = ReservationData.Reservations.FirstOrDefault(r => r.Id == id);
+            if (reservation == null) return RedirectToAction("Index");
 
-            return RedirectToAction("Index");
+            var service = ReservationData.Services.FirstOrDefault(s => s.Id == reservation.ServiceId);
+            ViewBag.Service = service;
+            return View(reservation);
+        }
+
+        [HttpPost]
+        public IActionResult Confirm(int id)
+        {
+            var reservation = ReservationData.Reservations.FirstOrDefault(r => r.Id == id);
+            if (reservation != null)
+            {
+                reservation.Confirmed = true;
+            }
+            return RedirectToAction("MyReservations");
+        }
+
+        public IActionResult MyReservations()
+        {
+            return View(ReservationData.Reservations.OrderByDescending(r => r.Date));
+        }
+
+        [HttpPost]
+        public IActionResult Cancel(int id)
+        {
+            var reservation = ReservationData.Reservations.FirstOrDefault(r => r.Id == id);
+            if (reservation != null)
+            {
+                ReservationData.Reservations.Remove(reservation);
+            }
+            return RedirectToAction("MyReservations");
+        }
+
+        public IActionResult CheckAvailability(int serviceId, DateTime date)
+        {
+            var booked = ReservationData.Reservations
+                .Where(r => r.ServiceId == serviceId && r.Date.Date == date.Date)
+                .Select(r => r.TimeSlot)
+                .ToList();
+
+            var available = ReservationData.AvailableSlots.Except(booked).ToList();
+            return Json(available);
         }
     }
 }
-

@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Reservar Cita";
+    Layout = "_Layout";
+    var service = (Reservations.Models.Service)ViewBag.Service;
+    var slots = (List<string>)ViewBag.AvailableSlots;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <div style="font-size: 4rem;">@service.Icon</div>
+                    <h2 class="fw-bold">@service.Name</h2>
+                    <p class="text-muted">Duración: @service.Duration min | Precio: $@service.Price.ToString("N0")</p>
+                </div>
+
+                <form method="post" asp-action="Book">
+                    <input type="hidden" name="serviceId" value="@service.Id" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nombre Completo</label>
+                        <input type="text" name="clientName" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Email</label>
+                        <input type="email" name="clientEmail" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Fecha</label>
+                        <input type="date" name="date" id="dateInput" class="form-control"
+                               min="@DateTime.Now.ToString("yyyy-MM-dd")" required onchange="checkAvailability()" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Hora</label>
+                        <select name="timeSlot" id="timeSlot" class="form-select" required>
+                            <option value="">Selecciona un horario</option>
+                        </select>
+                        <div id="loading" class="text-center mt-2" style="display: none;">
+                            <span class="spinner-border spinner-border-sm"></span> Verificando disponibilidad...
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        Confirmar Reserva
+                    </button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <a asp-action="Index" class="text-muted">← Volver a servicios</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkAvailability() {
+        const date = document.getElementById('dateInput').value;
+        const serviceId = @service.Id;
+        const loading = document.getElementById('loading');
+        const timeSlot = document.getElementById('timeSlot');
+
+        if (!date) return;
+
+        loading.style.display = 'block';
+        timeSlot.innerHTML = '<option value="">Cargando...</option>';
+
+        fetch(`/Reservation/CheckAvailability?serviceId=${serviceId}&date=${date}`)
+            .then(response => response.json())
+            .then(data => {
+                timeSlot.innerHTML = '<option value="">Selecciona un horario</option>';
+                data.forEach(slot => {
+                    timeSlot.innerHTML += `<option value="${slot}">${slot}</option>`;
+                });
+                loading.style.display = 'none';
+
+                if (data.length === 0) {
+                    timeSlot.innerHTML = '<option value="">No hay horarios disponibles</option>';
+                }
+            });
+    }
+</script>

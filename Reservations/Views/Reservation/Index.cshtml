@@ -1,100 +1,46 @@
-﻿@model Reservations.Models.ReservationView
+﻿@model List<Reservations.Models.Service>
+@{
+    ViewData["Title"] = "Servicios Disponibles";
+    Layout = "_Layout";
+}
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<div class="container mt-5">
-
-    <h2 class="text-center mb-4">Online Reservation System</h2>
-
-    <div class="row">
-        <!-- Reservation Form -->
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    Make a Reservation
-                </div>
-                <div class="card-body">
-
-                    @if (!ViewData.ModelState.IsValid)
-                    {
-                        <div class="alert alert-danger">
-                            Este horario ya está reservado. Por favor elija otro.
-                        </div>
-                    }
-
-                    <form asp-action="Reserve" method="post">
-                        <div class="mb-3">
-                            <label>Customer Name</label>
-                            <input asp-for="NewReservation.CustomerName" class="form-control" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label>Date</label>
-                            <input asp-for="NewReservation.Date" type="date" class="form-control" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label>Time Slot</label>
-                            <select asp-for="NewReservation.TimeSlot" class="form-select">
-                                @foreach (var slot in Model.TimeSlots)
-                                {
-                                    <option>@slot</option>
-                                }
-                            </select>
-                        </div>
-
-                        <button class="btn btn-primary w-100">Reserve</button>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Booking List -->
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white">
-                    Scheduled Reservations
-                </div>
-
-                <div class="card-body">
-
-                    @if (Model.Reservations.Count == 0)
-                    {
-                        <p class="text-muted">No reservations yet.</p>
-                    }
-                    else
-                    {
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var b in Model.Reservations)
-                                {
-                                    <tr>
-                                        <td>@b.CustomerName</td>
-                                        <td>@b.Date.ToShortDateString()</td>
-                                        <td>@b.TimeSlot</td>
-                                        <td>
-                                            <a asp-action="Delete" asp-route-id="@b.Id" class="btn btn-sm btn-danger">
-                                                Delete
-                                            </a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-
-                </div>
-            </div>
-        </div>
-    </div>
-
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-bold text-primary">📅 Sistema de Reservas</h1>
+    <p class="text-muted">Selecciona un servicio para agendar tu cita</p>
+    <a asp-action="MyReservations" class="btn btn-outline-primary">📋 Mis Reservas</a>
 </div>
+
+<div class="row g-4">
+    @foreach (var service in Model)
+    {
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-body text-center">
+                    <div class="service-icon">@service.Icon</div>
+                    <h5 class="card-title fw-bold">@service.Name</h5>
+                    <p class="text-muted mb-2">⏱️ @service.Duration min</p>
+                    <p class="text-success fw-bold fs-5">$@service.Price.ToString("N0")</p>
+                    <a asp-action="Book" asp-route-id="@service.Id" class="btn btn-primary w-100">
+                        Reservar Ahora
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .service-icon {
+        font-size: 4rem;
+        margin: 20px 0;
+    }
+
+    .hover-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .hover-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+        }
+</style>

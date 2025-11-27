@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Reservations.Models.Reservation>
+@{
+    ViewData["Title"] = "Mis Reservas";
+    Layout = "_Layout";
+}
+
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-bold">Mis Reservas</h1>
+    <a asp-action="Index" class="btn btn-primary mt-3">➕ Nueva Reserva</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center">
+        <div style="font-size: 5rem; opacity: 0.3;">📭</div>
+        <h3 class="text-muted">No tienes reservas</h3>
+        <p>¡Agenda tu primera cita ahora!</p>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var reservation in Model)
+        {
+            var service = Reservations.Models.ReservationData.Services.FirstOrDefault(s => s.Id == reservation.ServiceId);
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm @(reservation.Confirmed ? "border-success" : "")">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <div style="font-size: 2.5rem;">@service?.Icon</div>
+                            @if (reservation.Confirmed)
+                            {
+                                <span class="badge bg-success">✔️ Confirmada</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">⏳ Pendiente</span>
+                            }
+                        </div>
+
+                        <h5 class="fw-bold">@service?.Name</h5>
+                        <p class="mb-1"><strong>👤</strong> @reservation.ClientName</p>
+                        <p class="mb-1"><strong>📅</strong> @reservation.Date.ToString("dd/MM/yyyy")</p>
+                        <p class="mb-3"><strong>🕐</strong> @reservation.TimeSlot</p>
+
+                        <form method="post" asp-action="Cancel" asp-route-id="@reservation.Id"
+                              onsubmit="return confirm('¿Cancelar esta reserva?');">
+                            <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                🗑️ Cancelar Reserva
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

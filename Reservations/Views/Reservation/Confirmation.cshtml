@@ -1,0 +1,62 @@
+﻿@model Reservations.Models.Reservation
+@{
+    ViewData["Title"] = "Confirmación";
+    Layout = "_Layout";
+    var service = (Reservations.Models.Service)ViewBag.Service;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-5 text-center">
+                <div class="mb-4">
+                    <div class="success-icon">✅</div>
+                    <h2 class="fw-bold text-success">¡Reserva Creada!</h2>
+                </div>
+
+                <div class="reservation-details bg-light p-4 rounded mb-4">
+                    <div class="mb-3">
+                        <div style="font-size: 3rem;">@service.Icon</div>
+                        <h4 class="fw-bold">@service.Name</h4>
+                    </div>
+
+                    <div class="text-start">
+                        <p><strong>Cliente:</strong> @Model.ClientName</p>
+                        <p><strong>Email:</strong> @Model.ClientEmail</p>
+                        <p><strong>Fecha:</strong> @Model.Date.ToString("dd/MM/yyyy")</p>
+                        <p><strong>Hora:</strong> @Model.TimeSlot</p>
+                        <p><strong>Duración:</strong> @service.Duration minutos</p>
+                        <p><strong>Precio:</strong> $@service.Price.ToString("N0")</p>
+                    </div>
+                </div>
+
+                <form method="post" asp-action="Confirm" asp-route-id="@Model.Id">
+                    <button type="submit" class="btn btn-success btn-lg w-100 mb-2">
+                        ✔️ Confirmar Asistencia
+                    </button>
+                </form>
+
+                <a asp-action="Index" class="btn btn-outline-primary w-100">
+                    Volver al Inicio
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .success-icon {
+        font-size: 5rem;
+        animation: bounce 1s ease;
+    }
+
+    @@keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+</style>
